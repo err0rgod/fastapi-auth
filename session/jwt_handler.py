@@ -3,7 +3,7 @@ from functools import wraps
 from model.models import userdata 
 from datetime import datetime , timedelta , timezone
 import uuid
-
+from blacklist import handleJwtBlacklist
 
 class jwtHandler:
 
@@ -26,7 +26,6 @@ class jwtHandler:
 
         encoded = jwt.encode(data,self.SECRET_KEY, algorithm=algorithm)
         return encoded
-
     def verifyJwt(self , token : str):
         try:
             decoded = jwt.decode(token , self.SECRET_KEY)
