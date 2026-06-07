@@ -10,7 +10,7 @@ class jwtHandler:
     def __init__(self, SECRET_KEY: str) -> None:
         self.SECRET_KEY = SECRET_KEY
 
-    def wrappper(self,User : userdata, mins : int| None = 1440,  algorithm : str | None = "HS256",*args , **kwargs) -> str:
+    def createJwt(self,User : userdata, mins : int| None = 1440,  algorithm : str | None = "HS256",*args , **kwargs) -> str:
         # for using the UTC globally
         now = datetime.now(timezone.utc)
         # jwt structure
