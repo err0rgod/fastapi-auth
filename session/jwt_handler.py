@@ -1,4 +1,4 @@
-from jwt import encode
+import jwt
 from functools import wraps
 from model.models import userdata 
 from datetime import datetime , timedelta , timezone
@@ -24,5 +24,14 @@ class jwtHandler:
             "exp" : now + exp
         }
 
-        encoded = encode(data,self.SECRET_KEY, algorithm=algorithm)
+        encoded = jwt.encode(data,self.SECRET_KEY, algorithm=algorithm)
         return encoded
+
+    def verifyJwt(self , token : str):
+        try:
+            decoded = jwt.decode(token , self.SECRET_KEY)
+            return decoded
+        except jwt.ExpiredSignatureError:
+            raise ValueError("Token has Expired")
+        except jwt.InvalidTokenError:
+            raise ValueError("Invalid Token")
