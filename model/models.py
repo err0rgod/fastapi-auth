@@ -22,7 +22,7 @@ class changedata(BaseModel):
 
 class refreshSession(SQLModel, table = True):
     session_id : str = Field(primary_key=True, nullable=False)
-    user_id : str = Field(nullable=False, foreign_key=True)
+    user_id : str = Field(nullable=False, foreign_key="userdata.user_id")
     token_hash : str =  Field(nullable=False)
     expires_at : datetime = Field(nullable=False)
     revoked : bool = Field(nullable=False, default=False)
