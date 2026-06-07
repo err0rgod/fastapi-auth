@@ -19,3 +19,10 @@ class changedata(BaseModel):
     user_name : str 
     old_password : str
     new_password : str
+
+class refreshSession(SQLModel, table = True):
+    session_id : str = Field(primary_key=True, nullable=False)
+    user_id : str = Field(nullable=False, foreign_key=True)
+    token_hash : str =  Field(nullable=False)
+    expires_at : datetime = Field(nullable=False)
+    revoked : bool = Field(nullable=False, default=False)

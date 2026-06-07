@@ -1,8 +1,10 @@
 import jwt
-from model.models import userdata 
+from model.models import userdata , refreshSession
 from datetime import datetime , timedelta , timezone
 import uuid
 import logging
+import secrets
+
 
 logger = logging.getLogger(__name__)
 class jwtHandler:
@@ -11,11 +13,11 @@ class jwtHandler:
         self.SECRET_KEY = SECRET_KEY
         self.algorithm = algorithm
 
-    def createJwt(self,User : userdata, mins : int| None = 1440, *args , **kwargs) -> str:
+    def createJwt(self,User : userdata, jwt_mins : int| None = 15,refresh_days : int |None = 7, *args , **kwargs) -> str:
         # for using the UTC globally
         now = datetime.now(timezone.utc)
         # jwt structure
-        exp = timedelta(minutes=mins)
+        exp = timedelta(minutes=jwt_mins)
         jti = str(uuid.uuid4())
         data = {
             "sub": User.user_id,
@@ -24,9 +26,10 @@ class jwtHandler:
             "iat" : now,
             "exp" : now + exp
         }
+        refresh_token = secrets.token_urlsafe(64)
 
         encoded = jwt.encode(data,self.SECRET_KEY, algorithms=[self.algorithm])
-        return encoded
+        return [encoded,refreshSession]
     def verifyJwt(self , token : str):
         try:
             decoded = jwt.decode(token , self.SECRET_KEY, algorithms=[self.algorithm])
