@@ -1,20 +1,28 @@
-from jwt import decode , encode
+from jwt import encode
 from functools import wraps
-from model.models import userdata , jwt_blacklist
+from model.models import userdata 
 from datetime import datetime , timedelta , timezone
+import uuid
 
 
-async def wrappper(User : userdata, SECRET_KEY : str,  mins : int| None = 24*60, *args , **kwargs) -> str:
-    # for using the UTC globally
-    now = datetime.now(timezone.utc)
-    # jwt structure
-    exp = timedelta(minutes=mins)
-    data = {
-        "sub": User.user_id,
-        "user_name" : User.user_name,
-        "iat" : now,
-        "exp" : now + exp
-    }
+class jwtHandler:
 
-    encoded = encode(data,SECRET_KEY, algorithm="HS256")
-    return encoded
+    def __init__(self, SECRET_KEY: str) -> None:
+        self.SECRET_KEY = SECRET_KEY
+
+    def wrappper(self,User : userdata, mins : int| None = 1440,  algorithm : str | None = "HS256",*args , **kwargs) -> str:
+        # for using the UTC globally
+        now = datetime.now(timezone.utc)
+        # jwt structure
+        exp = timedelta(minutes=mins)
+        jti = str(uuid.uuid4())
+        data = {
+            "sub": User.user_id,
+            "jti" : jti,
+            "user_name" : User.user_name,
+            "iat" : now,
+            "exp" : now + exp
+        }
+
+        encoded = encode(data,self.SECRET_KEY, algorithm=algorithm)
+        return encoded

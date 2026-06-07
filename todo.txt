@@ -1,6 +1,6 @@
 for auth library context 
 1. Identity & Credential Management
-   * Secure Hashing: Mandatory use of Argon2id or bcrypt (never SHA-256 or MD5).
+   * Secure Hashing: Mandatory use of Argon2id or bcrypt
    * Salt Management: Automatic unique salt generation per user (standard in libraries like argon2-cffi).
    * Validation: Enforcing password complexity and username uniqueness.
 
