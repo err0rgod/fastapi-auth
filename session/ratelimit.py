@@ -1,5 +1,8 @@
 # redis based rate limitter
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 class RateLimiter:
     def __init__(self, storage_client , max_requests: int =10, window : int  =60):
@@ -15,5 +18,6 @@ class RateLimiter:
         if count == 1:
             self.storage.expire(key, self.window)
         if count > self.maxRequests:
-            raise ValueError(f"Rate limit exceeded. Try aagain in {self.window} seconds")
+            logger.warning(f"Rate Limit exceeded by {identifier}.")
+            raise ValueError(f"Rate limit exceeded. Try again in {self.window} seconds")
         return count

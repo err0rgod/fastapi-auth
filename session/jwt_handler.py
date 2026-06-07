@@ -2,7 +2,9 @@ import jwt
 from model.models import userdata 
 from datetime import datetime , timedelta , timezone
 import uuid
+import logging
 
+logger = logging.getLogger(__name__)
 class jwtHandler:
 
     def __init__(self, SECRET_KEY: str) -> None:
@@ -29,6 +31,8 @@ class jwtHandler:
             decoded = jwt.decode(token , self.SECRET_KEY)
             return decoded
         except jwt.ExpiredSignatureError:
+            logger.warning("Token has expired")
             raise ValueError("Token has Expired")
         except jwt.InvalidTokenError:
+            logger.warning("Invalid Token")
             raise ValueError("Invalid Token")
