@@ -1,30 +1,16 @@
-for auth library context 
-1. Identity & Credential Management
-   * Secure Hashing: Mandatory use of Argon2id or bcrypt
-   * Salt Management: Automatic unique salt generation per user (standard in libraries like argon2-cffi).
-   * Validation: Enforcing password complexity and username uniqueness.
+ 1. Refresh Tokens (OAuth2 Standard):
+      * Current: JWT expires, user is logged out. Bad UX.
+      * Missing: A long-lived "Refresh Token" (stored in DB) used to get new short-lived JWTs without re-entering password.
 
-  2. Session & Token Management
-   * Token Issuance: Secure generation of JWTs or session IDs.
-   * Token Refresh: Mechanism to issue new short-lived access tokens using long-lived refresh tokens.
-   * Blacklisting/Revocation: Ability to invalidate tokens (logout) before they naturally expire.
-   * Claims Handling: Storing user roles/permissions within the token.
+   2. Password Reset Flow:
+      * Missing: Logic to generate a secure, single-use, time-limited token (e.g., reset_token) to email to the user for "Forgot Password".
 
-  3. Security Hardening (The "Pro" Features)
-   * Rate Limiting: Throttling login attempts to prevent Brute Force and Credential Stuffing.
-   * Account Locking: Temporary lockout after N failed attempts.
-   * Secure Transport Defaults: Ensuring cookies are HttpOnly, Secure, and SameSite.
+   3. Role-Based Access Control (RBAC):
+      * Missing: Adding a role (Admin, User, Manager) to userdata.
+      * Missing: A decorator like @require_role("Admin") to protect specific endpoints.
 
-  4. Recovery & Maintenance
-   * Password Reset: Secure "forgot password" flow (one-time use, expiring links).
-   * Account Verification: Email/SMS verification during signup.
-   * Work Factor Upgrading: Automatically re-hashing passwords if the library's security parameters are increased.
+   4. Multi-Factor Auth (MFA / 2FA):
+      * Missing: TOTP integration (Google Authenticator) using a library like pyotp.
 
-  5. Multi-Factor Authentication (MFA)
-   * TOTP Support: Integration with apps like Google Authenticator.
-   * Recovery Codes: Backup access if MFA device is lost.
-
-  6. Developer Experience (DX)
-   * Middleware/Decorators: Easy way to protect routes (e.g., @require_auth).
-   * Pluggable Backends: Ability to switch between SQLite, PostgreSQL, or Redis for session storage.
-   * Clear Error Messaging: Distinct errors for "User not found" vs "Invalid password" (internally), while returning a generic error to the user to prevent enumeration.
+   5. Token Delivery Helpers:
+      * Missing: Utility functions to set secure cookies (HttpOnly, Secure, SameSite=Lax) because passing JWTs in JSON bodies and storing them in LocalStorage is vulnerable to XSS.
