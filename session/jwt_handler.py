@@ -27,21 +27,21 @@ class jwtHandler:
             "iat" : now,
             "exp" : now + exp
         }
-        access_token = jwt.encode(data,self.SECRET_KEY, algorithm=self.algorithm)
+        access_token = jwt.encode(data,self.SECRET_KEY, algorithms=[self.algorithm])
         raw_refresh_token = secrets.token_urlsafe(64)
         refresh_token = hashlib.sha256(raw_refresh_token.encode().hexdigest())
 
         session_obj = refreshSession(
             session_id= str(uuid.uuid4()),
             user_id = User.user_id,
-            token_hash= refresh_token
+            token_hash= refresh_token,
             expires_at= now + timedelta(days=refresh_days)
         )
 
         return access_token, raw_refresh_token, session_obj
     def verifyJwt(self , token : str):
         try:
-            decoded = jwt.decode(token , self.SECRET_KEY, algorithm=self.algorithm)
+            decoded = jwt.decode(token , self.SECRET_KEY, algorithms=[self.algorithm])
             return decoded
         except jwt.ExpiredSignatureError:
             logger.warning("Token has expired")

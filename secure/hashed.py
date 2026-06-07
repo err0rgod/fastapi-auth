@@ -1,8 +1,9 @@
 from argon2 import PasswordHasher
-from model.models import userdata
+from model.models import userdata, refreshSession
 from validations.structure import validate_creds_structure 
 from datetime import datetime , timedelta , timezone
 import logging
+from sqlmodel import Session, select
 
 ph = PasswordHasher()
 logger = logging.getLogger(__name__)
@@ -34,3 +35,28 @@ def verifyPassword(User : userdata , hash : str):
             User.locked_untill = now + timedelta(minutes=15)
         return False
     
+
+def resetPassword(User : userdata,session : Session ,new_password : str, hash : str):
+    is_valid = verifyPassword(User, hash)
+    if not is_valid:
+        raise ValueError("Invalid Credentials")
+    else:
+        hashed_new_password = ph.hash(new_password)
+        statement = select(userdata).where(userdata.user_id == User.user_id)
+        results = session.exec(statement).first()
+        if results:
+            results.password = hashed_new_password
+            session.add(results)
+            session.commit()
+            token_statement = select(refreshSession).where((refreshSession.user_id == User.user_id) & (refreshSession.revoked == False))
+            active_tokens = session.exec(token_statement).all()
+
+            for token in active_tokens:
+                token.revoked = True
+                session.add(token)
+            session.coomit()
+
+            logger.info(f"Password changed and {len(active_tokens)} revoked for {User.user_id}")
+            return True
+        else:
+            return False

@@ -10,15 +10,12 @@ class userdata(SQLModel, table=True):
     failed_attempts : int = Field(default=0)
     locked_untill : Optional[datetime] = Field(default=None)
 
+
 class jwt_blacklist(SQLModel, table=True):
     user_name : str = Field(nullable= False)
     jti : str = Field(primary_key=True, nullable=False)
     expired_at : datetime = Field(nullable=False)
 
-class changedata(BaseModel):
-    user_name : str 
-    old_password : str
-    new_password : str
 
 class refreshSession(SQLModel, table = True):
     session_id : str = Field(primary_key=True, nullable=False)
