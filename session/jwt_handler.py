@@ -1,9 +1,7 @@
 import jwt
-from functools import wraps
 from model.models import userdata 
 from datetime import datetime , timedelta , timezone
 import uuid
-from blacklist import handleJwtBlacklist
 
 class jwtHandler:
 

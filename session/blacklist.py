@@ -18,7 +18,7 @@ class handleJwtBlacklist:
         self.session.add(blacklist)
         self.session.commit()
 
-    def is_token_blacklisted(self, jti : str):
+    def is_token_blacklisted(self, jti : str) -> bool:
         statement = select(jwt_blacklist).where(jwt_blacklist.jti == jti)
         result = self.session.exec(statement).first()
         return result is not None
