@@ -1,0 +1,30 @@
+for auth library context 
+1. Identity & Credential Management
+   * Secure Hashing: Mandatory use of Argon2id or bcrypt (never SHA-256 or MD5).
+   * Salt Management: Automatic unique salt generation per user (standard in libraries like argon2-cffi).
+   * Validation: Enforcing password complexity and username uniqueness.
+
+  2. Session & Token Management
+   * Token Issuance: Secure generation of JWTs or session IDs.
+   * Token Refresh: Mechanism to issue new short-lived access tokens using long-lived refresh tokens.
+   * Blacklisting/Revocation: Ability to invalidate tokens (logout) before they naturally expire.
+   * Claims Handling: Storing user roles/permissions within the token.
+
+  3. Security Hardening (The "Pro" Features)
+   * Rate Limiting: Throttling login attempts to prevent Brute Force and Credential Stuffing.
+   * Account Locking: Temporary lockout after N failed attempts.
+   * Secure Transport Defaults: Ensuring cookies are HttpOnly, Secure, and SameSite.
+
+  4. Recovery & Maintenance
+   * Password Reset: Secure "forgot password" flow (one-time use, expiring links).
+   * Account Verification: Email/SMS verification during signup.
+   * Work Factor Upgrading: Automatically re-hashing passwords if the library's security parameters are increased.
+
+  5. Multi-Factor Authentication (MFA)
+   * TOTP Support: Integration with apps like Google Authenticator.
+   * Recovery Codes: Backup access if MFA device is lost.
+
+  6. Developer Experience (DX)
+   * Middleware/Decorators: Easy way to protect routes (e.g., @require_auth).
+   * Pluggable Backends: Ability to switch between SQLite, PostgreSQL, or Redis for session storage.
+   * Clear Error Messaging: Distinct errors for "User not found" vs "Invalid password" (internally), while returning a generic error to the user to prevent enumeration.

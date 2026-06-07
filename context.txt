@@ -1,0 +1,26 @@
+ Context Snapshot: Stateless Auth Library
+
+  1. Hashing Standard
+   * Algo: Argon2id (argon2-cffi).
+   * Logic: ph.hash(pw) for storage, ph.verify(hash, pw) for check.
+   * Security: Catch exceptions.VerifyMismatchError. Mandatory re-verify for change_password and delete_account.
+
+  2. Session Design
+   * Token: JWT (Stateless).
+   * Transport: HttpOnly, SameSite="Lax" cookies.
+   * Revocation: jwt_blacklist table.
+   * TTL: 7-day auto-expiry (delete rows where created_at < now - 7 days).
+
+  3. Library Architecture (The "Agnostic" Plan)
+   * Pattern: Repository Pattern (Abstract Base Classes).
+   * Boundary: Library = Hashing + JWT + Auth Logic. Storage = User-provided adapter.
+   * Output: Pure JSON/Dict responses (Headless). No HTML/Templates.
+
+  4. Core Routes to Extract
+   * POST /signup
+   * POST /login
+   * POST /logout (Blacklist current JTI)
+   * POST /change_password (Verify old, hash new)
+   * POST /delete_account (Verify old, wipe record)
+
+  I'm ready when you are. Paste this or just say "Start Auth Library based on previous Argon2/JWT design" in the new session. Great work finishing the POC.
