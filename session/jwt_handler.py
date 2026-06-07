@@ -7,10 +7,11 @@ import logging
 logger = logging.getLogger(__name__)
 class jwtHandler:
 
-    def __init__(self, SECRET_KEY: str) -> None:
+    def __init__(self, SECRET_KEY: str, algorithm : str | None = "RS256") -> None:
         self.SECRET_KEY = SECRET_KEY
+        self.algorithm = algorithm
 
-    def createJwt(self,User : userdata, mins : int| None = 1440,  algorithm : str | None = "HS256",*args , **kwargs) -> str:
+    def createJwt(self,User : userdata, mins : int| None = 1440, *args , **kwargs) -> str:
         # for using the UTC globally
         now = datetime.now(timezone.utc)
         # jwt structure
@@ -24,11 +25,11 @@ class jwtHandler:
             "exp" : now + exp
         }
 
-        encoded = jwt.encode(data,self.SECRET_KEY, algorithm=algorithm)
+        encoded = jwt.encode(data,self.SECRET_KEY, algorithms=[self.algorithm])
         return encoded
     def verifyJwt(self , token : str):
         try:
-            decoded = jwt.decode(token , self.SECRET_KEY)
+            decoded = jwt.decode(token , self.SECRET_KEY, algorithms=[self.algorithm])
             return decoded
         except jwt.ExpiredSignatureError:
             logger.warning("Token has expired")
