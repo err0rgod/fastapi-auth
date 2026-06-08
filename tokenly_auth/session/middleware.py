@@ -4,8 +4,8 @@ Integrates with jwtHandler and handleJwtBlacklist to verify access tokens.
 """
 
 from functools import wraps
-from tokenly.session.jwt_handler import jwtHandler
-from tokenly.session.blacklist import handleJwtBlacklist
+from tokenly_auth.session.jwt_handler import jwtHandler
+from tokenly_auth.session.blacklist import handleJwtBlacklist
 import logging
 
 logger = logging.getLogger(__name__)

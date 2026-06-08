@@ -6,7 +6,7 @@ Provides functionality for creating access tokens and refresh session objects.
 from typing import Optional, Any, Dict, Tuple
 import hashlib
 import jwt
-from tokenly.model.models import userdata, refreshSession
+from tokenly_auth.model.models import userdata, refreshSession
 from datetime import datetime, timedelta, timezone
 import uuid
 import logging

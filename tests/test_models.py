@@ -1,4 +1,4 @@
-from tokenly.model.models import userdata, jwt_blacklist, refreshSession
+from tokenly_auth.model.models import userdata, jwt_blacklist, refreshSession
 from datetime import datetime
 
 

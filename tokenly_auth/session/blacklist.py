@@ -4,7 +4,7 @@ Handles revoking tokens by storing their JTI (JWT ID) in the database.
 """
 
 from sqlmodel import Session, select
-from tokenly.model.models import jwt_blacklist
+from tokenly_auth.model.models import jwt_blacklist
 from datetime import datetime
 
 

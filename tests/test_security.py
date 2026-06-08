@@ -1,6 +1,6 @@
 import pytest
-from tokenly.model.models import userdata
-from tokenly.secure.hashed import hash_password, verifyPassword
+from tokenly_auth.model.models import userdata
+from tokenly_auth.secure.hashed import hash_password, verifyPassword
 
 
 def test_password_hashing():

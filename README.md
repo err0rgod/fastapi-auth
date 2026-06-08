@@ -1,6 +1,6 @@
-# Tokenly
+# Tokenly-Auth
 
-Tokenly is a professional-grade Python library designed to handle Hybrid state authentication, session management, and security concerns for modern web applications. It provides a robust set of tools for password hashing, JWT management, rate limiting, and brute-force protection.
+Tokenly-Auth is a professional-grade Python library designed to handle Hybrid state authentication, session management, and security concerns for modern web applications. It provides a robust set of tools for password hashing, JWT management, rate limiting, and brute-force protection.
 
 ## Core Features
 
@@ -16,17 +16,17 @@ Tokenly is a professional-grade Python library designed to handle Hybrid state a
 Ensure you have the required dependencies installed:
 
 ```bash
-pip install sqlmodel pyjwt argon2-cffi
+pip install tokenly-auth
 ```
 
 ## Quick Start
 
 ### 1. Database Setup
 
-Tokenly uses SQLModel, allowing for easy database integration. You can use the provided `DatabaseManager` to initialize your database.
+Tokenly-Auth uses SQLModel, allowing for easy database integration. You can use the provided `DatabaseManager` to initialize your database.
 
 ```python
-from tokenly import DatabaseManager
+from tokenly_auth import DatabaseManager
 
 db = DatabaseManager(db_url="sqlite:///./auth.db")
 
@@ -35,14 +35,14 @@ db.init_db()
 
 # Get a session
 with next(db.get_session()) as session:
-    # Use the session with Tokenly functions
+    # Use the session with Tokenly-Auth functions
     pass
 ```
 
 ### 2. Password Hashing and Verification
 
 ```python
-from tokenly import userdata, hash_password, verifyPassword
+from tokenly_auth import userdata, hash_password, verifyPassword
 
 # Create a user object
 user = userdata(
@@ -61,7 +61,7 @@ is_valid = verifyPassword(user, "MySecurePassword123!")
 ### 3. JWT Generation
 
 ```python
-from tokenly import jwtHandler
+from tokenly_auth import jwtHandler
 
 handler = jwtHandler(SECRET_KEY="your_secret_key", algorithm="HS256")
 access_token, raw_refresh, session_obj = handler.createJwt(user)
@@ -70,7 +70,7 @@ access_token, raw_refresh, session_obj = handler.createJwt(user)
 ### 4. Protecting Routes
 
 ```python
-from tokenly import require_auth
+from tokenly_auth import require_auth
 
 @require_auth(jwt_handler=handler)
 def get_user_profile(payload):
@@ -79,7 +79,7 @@ def get_user_profile(payload):
 
 ## Security Design
 
-Tokenly is built with security-first principles:
+Tokenly-Auth is built with security-first principles:
 - **Argon2id:** Utilizes the industry-standard password hashing algorithm.
 - **Token Rotation:** Refresh tokens are single-use; a new one is generated upon every refresh.
 - **Brute-Force Protection:** Automatically locks accounts for 15 minutes after 5 failed attempts.

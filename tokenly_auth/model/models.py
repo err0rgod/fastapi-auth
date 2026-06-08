@@ -1,5 +1,5 @@
 """
-Module for defining data models used throughout the Tokenly library.
+Module for defining data models used throughout the Tokenly-Auth library.
 This module uses SQLModel (built on SQLAlchemy and Pydantic) to define
 database schemas for user data, token blacklisting, and session management.
 """
