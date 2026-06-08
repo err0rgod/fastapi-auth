@@ -51,7 +51,7 @@ def verifyPassword(User: userdata, hash: str) -> bool:
     """
     now = datetime.now(timezone.utc)
     if User.locked_untill and now < User.locked_untill:
-        logger.warning(f"account locked of user {User.user_id}")
+        logger.warning(f"Account locked of user {User.user_id}")
         raise ValueError("Account Locked Try again Later.")
     try:
         valid = ph.verify(User.password, hash)

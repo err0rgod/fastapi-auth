@@ -22,7 +22,7 @@ class jwtHandler:
         algorithm (str): The algorithm used for JWT encoding/decoding (default: "RS256").
     """
 
-    def __init__(self, SECRET_KEY: str, algorithm: str | None = "RS256") -> None:
+    def __init__(self, SECRET_KEY: str, algorithm: str | None = "HS256") -> None:
         """
         Initializes the jwtHandler with security credentials.
 

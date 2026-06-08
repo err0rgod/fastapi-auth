@@ -17,7 +17,7 @@ class userdata(SQLModel, table=True):
         user_name (str): Unique username for authentication.
         password (str): Hashed password string.
         failed_attempts (int): Counter for tracking failed login attempts for brute-force protection.
-        locked_untill (Optional[datetime]): Timestamp until which the account is locked after multiple failures.
+        locked_until (Optional[datetime]): Timestamp until which the account is locked after multiple failures.
     """
     user_id: str = Field(primary_key=True, nullable=False, unique=True)
     user_name: str = Field(unique=True, nullable=False)
