@@ -1,1 +1,1 @@
-from .models import userdata, jwt_blacklist, changedata
+from .models import userdata, jwt_blacklist
