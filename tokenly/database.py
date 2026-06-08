@@ -6,6 +6,7 @@ Provides boilerplate for connecting to a database and initializing tables.
 from sqlmodel import SQLModel, create_engine, Session
 from typing import Generator
 
+
 class DatabaseManager:
     """
     Manages database connection and session lifecycle.

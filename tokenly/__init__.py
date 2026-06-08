@@ -5,7 +5,7 @@ from tokenly.session import (
     handleJwtBlacklist,
     require_auth,
     RateLimiter,
-    RefreshManager
+    RefreshManager,
 )
 from tokenly.validations.structure import validate_creds_structure
 from tokenly.database import DatabaseManager

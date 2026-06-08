@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "tokenly-auth"
 version = "0.1.0"
 authors = [
-  { name="Nirbhay Katiyar", email="nirbhayerror@gmail.com" },
+  { name="Tokenly Team", email="your-email@example.com" },
 ]
 description = "A professional-grade hybrid lightweight authentication and session management library."
 readme = "README.md"
@@ -25,9 +25,35 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/err0rgod/tokenly"
-"Bug Tracker" = "https://github.com/err0rgod/tokenly/issues"
+"Homepage" = "https://github.com/yourusername/tokenly"
+"Bug Tracker" = "https://github.com/yourusername/tokenly/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["tokenly*"]
+
+[tool.ruff]
+# Target Python version
+target-version = "py38"
+
+# Same as Black.
+line-length = 100
+
+[tool.ruff.lint]
+# Enable Pyflakes (F) and a subset of the pycodestyle (E) codes by default.
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Use profile "black" for formatting
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

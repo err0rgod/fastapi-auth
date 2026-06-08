@@ -1,13 +1,14 @@
 """
 Module for managing refresh token rotation and validation.
-Ensures secure session persistence by validating refresh tokens and 
+Ensures secure session persistence by validating refresh tokens and
 enforcing rotation policies.
 """
 
 from datetime import datetime, timezone
-from tokenly.model.models import refreshSession, userdata
+from tokenly.model.models import refreshSession
 from sqlmodel import select, Session
 import hashlib
+
 
 class RefreshManager:
     """
@@ -53,11 +54,11 @@ class RefreshManager:
 
         if not db_token:
             raise ValueError("Invalid refresh token.")
-        
+
         if db_token.revoked:
             # Security measure: If a revoked token is reused, it might indicate theft
             raise ValueError("Refresh token has been revoked. Possible theft detected.")
-        
+
         if now > db_token.expires_at:
             raise ValueError("The refresh token has expired.")
 
@@ -65,5 +66,5 @@ class RefreshManager:
         db_token.revoked = True
         self.session.add(db_token)
         self.session.commit()
-        
+
         return db_token.user_id

@@ -1,0 +1,3 @@
+sqlmodel>=0.0.14
+pyjwt>=2.8.0
+argon2-cffi>=23.1.0

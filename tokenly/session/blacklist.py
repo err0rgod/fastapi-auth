@@ -7,6 +7,7 @@ from sqlmodel import Session, select
 from tokenly.model.models import jwt_blacklist
 from datetime import datetime
 
+
 class handleJwtBlacklist:
     """
     Manages the blacklisting of JWT tokens to handle logouts and security revocations.
@@ -33,11 +34,7 @@ class handleJwtBlacklist:
             user_name (str): The username associated with the token.
             expired_at (datetime): The original expiration time of the token.
         """
-        blacklist = jwt_blacklist(
-            jti=jti,
-            user_name=user_name,
-            expired_at=expired_at
-        )
+        blacklist = jwt_blacklist(jti=jti, user_name=user_name, expired_at=expired_at)
 
         self.session.add(blacklist)
         self.session.commit()

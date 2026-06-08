@@ -13,6 +13,7 @@ import secrets
 
 logger = logging.getLogger(__name__)
 
+
 class jwtHandler:
     """
     Handles JWT operations including creation and verification.
@@ -33,7 +34,14 @@ class jwtHandler:
         self.SECRET_KEY = SECRET_KEY
         self.algorithm = algorithm
 
-    def createJwt(self, User: userdata, jwt_mins: int | None = 15, refresh_days: int | None = 7, *args, **kwargs) -> tuple[str, str, refreshSession]:
+    def createJwt(
+        self,
+        User: userdata,
+        jwt_mins: int | None = 15,
+        refresh_days: int | None = 7,
+        *args,
+        **kwargs,
+    ) -> tuple[str, str, refreshSession]:
         """
         Creates a new JWT access token and a corresponding refresh session.
 
@@ -50,7 +58,7 @@ class jwtHandler:
         """
         # Using UTC for global consistency
         now = datetime.now(timezone.utc)
-        
+
         # JWT Payload structure
         exp = timedelta(minutes=jwt_mins)
         jti = str(uuid.uuid4())
@@ -59,12 +67,12 @@ class jwtHandler:
             "jti": jti,
             "user_name": User.user_name,
             "iat": now,
-            "exp": now + exp
+            "exp": now + exp,
         }
-        
+
         # Encode Access Token
         access_token = jwt.encode(data, self.SECRET_KEY, algorithm=self.algorithm)
-        
+
         # Generate Refresh Token
         raw_refresh_token = secrets.token_urlsafe(64)
         refresh_token_hash = hashlib.sha256(raw_refresh_token.encode()).hexdigest()
@@ -74,7 +82,7 @@ class jwtHandler:
             session_id=str(uuid.uuid4()),
             user_id=User.user_id,
             token_hash=refresh_token_hash,
-            expires_at=now + timedelta(days=refresh_days)
+            expires_at=now + timedelta(days=refresh_days),
         )
 
         return access_token, raw_refresh_token, session_obj

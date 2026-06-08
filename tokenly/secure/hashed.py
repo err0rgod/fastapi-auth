@@ -6,7 +6,7 @@ by tracking failed attempts and locking accounts temporarily.
 
 from argon2 import PasswordHasher
 from tokenly.model.models import userdata, refreshSession
-from tokenly.validations.structure import validate_creds_structure 
+from tokenly.validations.structure import validate_creds_structure
 from datetime import datetime, timedelta, timezone
 import logging
 from sqlmodel import Session, select
@@ -14,6 +14,7 @@ from sqlmodel import Session, select
 # Initializing the password hashing and logging objects
 ph = PasswordHasher()
 logger = logging.getLogger(__name__)
+
 
 @validate_creds_structure
 def hash_password(User: userdata) -> userdata:
@@ -68,7 +69,9 @@ def verifyPassword(User: userdata, hash: str) -> bool:
         return False
 
 
-def resetPassword(User: userdata, session: Session, new_password: str, old_password_plain: str) -> bool:
+def resetPassword(
+    User: userdata, session: Session, new_password: str, old_password_plain: str
+) -> bool:
     """
     Resets the user's password after verifying the old password.
     Revokes all active refresh sessions for the user upon successful reset.
@@ -96,7 +99,7 @@ def resetPassword(User: userdata, session: Session, new_password: str, old_passw
             results.password = hashed_new_password
             session.add(results)
             session.commit()
-            
+
             # Revoke active refresh tokens
             token_statement = select(refreshSession).where(
                 (refreshSession.user_id == User.user_id) & (refreshSession.revoked == False)
@@ -108,7 +111,9 @@ def resetPassword(User: userdata, session: Session, new_password: str, old_passw
                 session.add(token)
             session.commit()
 
-            logger.info(f"Password changed and {len(active_tokens)} tokens revoked for {User.user_id}")
+            logger.info(
+                f"Password changed and {len(active_tokens)} tokens revoked for {User.user_id}"
+            )
             return True
         else:
             return False
