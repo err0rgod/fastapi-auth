@@ -3,10 +3,10 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tokenly-auth"
+name = "tokenly"
 version = "0.1.0"
 authors = [
-  { name="Tokenly Team", email="your-email@example.com" },
+  { name="err0rgod", email="nirbhayerror@gmail.com" },
 ]
 description = "A professional-grade hybrid lightweight authentication and session management library."
 readme = "README.md"
@@ -25,8 +25,8 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/yourusername/tokenly"
-"Bug Tracker" = "https://github.com/yourusername/tokenly/issues"
+"Homepage" = "https://github.com/err0rgod/tokenly"
+"Bug Tracker" = "https://github.com/err0rgod/tokenly/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
