@@ -50,21 +50,21 @@ def verifyPassword(User: userdata, hash: str) -> bool:
         ValueError: If the account is currently locked.
     """
     now = datetime.now(timezone.utc)
-    if User.locked_untill and now < User.locked_untill:
-        logger.warning(f"Account locked of user {User.user_id}")
+    if User.locked_until and now < User.locked_until:
+        logger.warning(f"account locked of user {User.user_id}")
         raise ValueError("Account Locked Try again Later.")
     try:
         valid = ph.verify(User.password, hash)
         if valid:
             logger.info("Password verified successfully")
             User.failed_attempts = 0
-            User.locked_untill = None
+            User.locked_until = None
             return True
     except Exception:
         logger.warning(f"Invalid hash by {User.user_id} brute-force protection initiated")
         User.failed_attempts += 1
         if User.failed_attempts >= 5:
-            User.locked_untill = now + timedelta(minutes=15)
+            User.locked_until = now + timedelta(minutes=15)
         return False
 
 
