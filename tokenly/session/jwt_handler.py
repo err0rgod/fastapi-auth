@@ -3,6 +3,7 @@ Module for handling JSON Web Token (JWT) generation and verification.
 Provides functionality for creating access tokens and refresh session objects.
 """
 
+from typing import Optional, Any, Dict, Tuple
 import hashlib
 import jwt
 from tokenly.model.models import userdata, refreshSession
@@ -23,7 +24,7 @@ class jwtHandler:
         algorithm (str): The algorithm used for JWT encoding/decoding (default: "RS256").
     """
 
-    def __init__(self, SECRET_KEY: str, algorithm: str | None = "HS256") -> None:
+    def __init__(self, SECRET_KEY: str, algorithm: Optional[str] = "HS256") -> None:
         """
         Initializes the jwtHandler with security credentials.
 
@@ -37,11 +38,11 @@ class jwtHandler:
     def createJwt(
         self,
         User: userdata,
-        jwt_mins: int | None = 15,
-        refresh_days: int | None = 7,
+        jwt_mins: Optional[int] = 15,
+        refresh_days: Optional[int] = 7,
         *args,
         **kwargs,
-    ) -> tuple[str, str, refreshSession]:
+    ) -> Tuple[str, str, refreshSession]:
         """
         Creates a new JWT access token and a corresponding refresh session.
 
