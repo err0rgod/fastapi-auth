@@ -2,9 +2,9 @@ Metadata-Version: 2.4
 Name: tokenly-auth
 Version: 0.1.0
 Summary: A professional-grade hybrid lightweight authentication and session management library.
-Author-email: Nirbhay Katiyar <nirbhayerror@gmail.com>
-Project-URL: Homepage, https://github.com/err0rgod/tokenly
-Project-URL: Bug Tracker, https://github.com/err0rgod/tokenly/issues
+Author-email: Tokenly Team <your-email@example.com>
+Project-URL: Homepage, https://github.com/yourusername/tokenly
+Project-URL: Bug Tracker, https://github.com/yourusername/tokenly/issues
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
