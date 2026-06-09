@@ -31,7 +31,7 @@ def hash_password(password: str, user_id: str | None = None) -> str:
     return ph.hash(password)
 
 
-def verifyPassword(password: str, hash: str, user_id : str | None = None,locked_until : datetime | None = None) -> bool:
+def verifyPassword(password: str, hash: str, user_id : str | None = None,locked_until : datetime | None = None, failed_attemps : int | None = None) -> bool:
     """
     Verifies a plain-text password against a stored hash and implements brute-force protection.
 
