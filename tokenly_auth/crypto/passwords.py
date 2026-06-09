@@ -4,6 +4,7 @@ Uses Argon2 for secure password hashing and provides brute-force protection
 by tracking failed attempts and locking accounts temporarily.
 """
 
+from typing import Optional
 from argon2 import PasswordHasher
 from tokenly_auth.validators.credentials import validate_creds_structure
 from datetime import datetime, timedelta, timezone
@@ -14,7 +15,7 @@ ph = PasswordHasher()
 logger = logging.getLogger(__name__)
 
 
-def hash_password(password: str, user_id: str | None = None) -> str:
+def hash_password(password: str, user_id: Optional[str] = None) -> str:
     """
     Hashes the user's password using Argon2.
 
@@ -30,7 +31,7 @@ def hash_password(password: str, user_id: str | None = None) -> str:
     return ph.hash(password)
 
 
-def verifyPassword(password: str, hash: str, user_id: str | None = None, locked_until: datetime | None = None, failed_attempts: int | None = 0) -> bool:
+def verifyPassword(password: str, hash: str, user_id: Optional[str] = None, locked_until: Optional[datetime] = None, failed_attempts: Optional[int] = 0) -> bool:
     """
     Verifies a plain-text password against a stored hash.
 
@@ -60,7 +61,7 @@ def verifyPassword(password: str, hash: str, user_id: str | None = None, locked_
         return False
 
 
-def resetPassword(old_hash: str, old_password_plain: str, new_password: str, user_id: str | None = None) -> str:
+def resetPassword(old_hash: str, old_password_plain: str, new_password: str, user_id: Optional[str] = None) -> str:
     """
     Utility to verify old password and generate a new hash.
 

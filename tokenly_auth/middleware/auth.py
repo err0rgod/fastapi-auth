@@ -4,13 +4,14 @@ Integrates with jwtHandler and handleJwtBlacklist to verify access tokens.
 """
 
 from functools import wraps
+from typing import Optional
 from tokenly_auth.tokens.jwt import jwtHandler
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def require_auth(jwt_handler: jwtHandler, isBlacklisted : bool | None = False):
+def require_auth(jwt_handler: jwtHandler, isBlacklisted: Optional[bool] = False):
     """
     Decorator to enforce JWT authentication on a function.
 
