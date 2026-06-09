@@ -1,19 +1,17 @@
 # Tokenly-Auth
 
-Tokenly-Auth is a professional-grade Python library designed to handle Hybrid state authentication, session management, and security concerns for modern web applications. It provides a robust set of tools for password hashing, JWT management, rate limiting, and brute-force protection.
+Tokenly-Auth is a professional-grade, database-agnostic authentication and session management utility library for Python. It provides high-level security primitives without enforcing any specific database ORM or model structure, giving you total flexibility.
 
 ## Core Features
 
-- **Secure Password Management:** Uses Argon2 hashing with built-in brute-force protection and account locking.
-- **JWT Handling:** Full support for access token generation, verification, and blacklisting.
-- **Session Persistence:** Secure refresh token rotation and validation logic.
-- **Rate Limiting:** Storage-agnostic rate limiting to prevent API abuse.
-- **Data Integrity:** SQLModel-based schemas for easy integration with relational databases.
-- **Validation:** Strict structural validation for user credentials.
+- **Crypto Utilities:** Argon2id password hashing and verification with brute-force protection logic.
+- **Token Management:** JWT creation and verification.
+- **Session Utilities:** Secure refresh token hashing for rotation strategies.
+- **Middleware:** Storage-agnostic rate limiting and authentication decorators.
+- **Validation:** Strict structural validation for usernames and passwords.
+- **Lightweight:** No dependency on SQLModel, Pydantic, or any specific database driver.
 
 ## Installation
-
-Ensure you have the required dependencies installed:
 
 ```bash
 pip install tokenly-auth
@@ -21,78 +19,63 @@ pip install tokenly-auth
 
 ## Quick Start
 
-### 1. Database Setup
-
-Tokenly-Auth uses SQLModel, allowing for easy database integration. You can use the provided `DatabaseManager` to initialize your database.
+### 1. Password Hashing
 
 ```python
-from tokenly_auth import DatabaseManager
+from tokenly_auth import Security
 
-db = DatabaseManager(db_url="sqlite:///./auth.db")
+# Hash a password
+hashed = Security["hash"]("my_secure_password")
 
-# Create tables (Run this during initial setup)
-db.init_db()
+# Verify a password
+is_valid = Security["verify"]("my_secure_password", hashed)
 
-# Get a session
-with next(db.get_session()) as session:
-    # Use the session with Tokenly-Auth functions
-    pass
+# Reset logic (Verify old -> Hash new)
+new_hash = Security["reset"](hashed, "old_password", "new_password")
 ```
 
-### 2. Password Hashing and Verification
+### 2. JWT & Tokens
 
 ```python
-from tokenly_auth import userdata, hash_password, verifyPassword
+from tokenly_auth import TokenHandler, SessionManager
 
-# Create a user object
-user = userdata(
-    user_id="user_01",
-    user_name="john_doe",
-    password="MySecurePassword123!"
-)
+handler = TokenHandler(SECRET_KEY="your_secret_key")
 
-# Hash the password before saving to DB
-hash_password(user)
+# Create Access & Refresh tokens
+tokens = handler.createJwt(sub="user_id_123")
+# Returns: {"access_token": "...", "refresh_token": "...", "refresh_days": 7}
 
-# Verify the password later
-is_valid = verifyPassword(user, "MySecurePassword123!")
+# Hash refresh token for secure storage
+session_util = SessionManager()
+storage_hash = session_util.hash_refresh_token(tokens["refresh_token"])
 ```
 
-### 3. JWT Generation
+### 3. Middleware & Protection
 
 ```python
-from tokenly_auth import jwtHandler
+from tokenly_auth import require_auth, TokenHandler
 
-handler = jwtHandler(SECRET_KEY="your_secret_key", algorithm="HS256")
-access_token, raw_refresh, session_obj = handler.createJwt(user)
-```
-
-### 4. Protecting Routes
-
-```python
-from tokenly_auth import require_auth
+handler = TokenHandler(SECRET_KEY="your_secret_key")
 
 @require_auth(jwt_handler=handler)
-def get_user_profile(payload):
-    return f"Welcome {payload['user_name']}"
+def protected_route(payload):
+    return f"Hello {payload['sub']}"
 ```
 
-## Security Design
+## Architecture: Why "Database Agnostic"?
 
-Tokenly-Auth is built with security-first principles:
-- **Argon2id:** Utilizes the industry-standard password hashing algorithm.
-- **Token Rotation:** Refresh tokens are single-use; a new one is generated upon every refresh.
-- **Brute-Force Protection:** Automatically locks accounts for 15 minutes after 5 failed attempts.
-- **Blacklisting:** Enables immediate revocation of tokens during logout or security breaches.
+Unlike other libraries that force you to use a specific ORM (like SQLAlchemy or SQLModel), Tokenly-Auth acts as a **security toolkit**. 
+
+- **You** control the database (PostgreSQL, MongoDB, Redis, etc.).
+- **You** control the models.
+- **Tokenly-Auth** handles the heavy lifting of hashing, signing, and security logic.
 
 ## Testing
 
-The library includes a comprehensive suite of unit tests. To run the tests, use:
-
 ```bash
-pytest tests/
+pytest
 ```
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License.

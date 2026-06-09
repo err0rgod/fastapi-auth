@@ -6,7 +6,6 @@ Provides functionality for creating access tokens and refresh session objects.
 from typing import Optional, Any, Dict, Tuple
 import hashlib
 import jwt
-from tokenly_auth.model.models import userdata, refreshSession
 from datetime import datetime, timedelta, timezone
 import uuid
 import logging
@@ -37,25 +36,22 @@ class jwtHandler:
 
     def createJwt(
         self,
-        User: userdata,
+        sub: str,
         jwt_mins: Optional[int] = 15,
         refresh_days: Optional[int] = 7,
         *args,
         **kwargs,
-    ) -> Tuple[str, str, refreshSession]:
+    ) -> dict:
         """
-        Creates a new JWT access token and a corresponding refresh session.
+        Generates access and refresh tokens.
 
         Args:
-            User (userdata): The user for whom the tokens are being created.
-            jwt_mins (int, optional): Access token expiration in minutes. Defaults to 15.
-            refresh_days (int, optional): Refresh token expiration in days. Defaults to 7.
+            sub (str): Unique identifier for the user.
+            jwt_mins (int, optional): Access token validity in minutes.
+            refresh_days (int, optional): Refresh token validity in days.
 
         Returns:
-            tuple[str, str, refreshSession]: A tuple containing:
-                - access_token (str): The encoded JWT access token.
-                - raw_refresh_token (str): The plain-text refresh token for the client.
-                - session_obj (refreshSession): The SQLModel object representing the refresh session.
+            dict: Contains 'access_token' and 'refresh_token' (which is the hash) and 'refresh_day'.
         """
         # Using UTC for global consistency
         now = datetime.now(timezone.utc)
@@ -64,9 +60,8 @@ class jwtHandler:
         exp = timedelta(minutes=jwt_mins)
         jti = str(uuid.uuid4())
         data = {
-            "sub": User.user_id,
+            "sub": sub,
             "jti": jti,
-            "user_name": User.user_name,
             "iat": now,
             "exp": now + exp,
         }
@@ -78,15 +73,11 @@ class jwtHandler:
         raw_refresh_token = secrets.token_urlsafe(64)
         refresh_token_hash = hashlib.sha256(raw_refresh_token.encode()).hexdigest()
 
-        # Create Refresh Session Object
-        session_obj = refreshSession(
-            session_id=str(uuid.uuid4()),
-            user_id=User.user_id,
-            token_hash=refresh_token_hash,
-            expires_at=now + timedelta(days=refresh_days),
-        )
-
-        return access_token, raw_refresh_token, session_obj
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token_hash,
+            "refresh_days": refresh_days
+        }
 
     def verifyJwt(self, token: str) -> dict:
         """

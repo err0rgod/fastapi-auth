@@ -1,14 +1,36 @@
-from tokenly_auth.model.models import userdata, jwt_blacklist, refreshSession
-from tokenly_auth.secure.hashed import hash_password, verifyPassword, resetPassword
-from tokenly_auth.session import (
-    jwtHandler,
-    handleJwtBlacklist,
-    RefreshManager,
-    RateLimiter,
-    require_auth,
+from tokenly_auth.crypto.passwords import (
+    hash_password,
+    verifyPassword,
+    resetPassword,
 )
-from tokenly_auth.validations.structure import validate_creds_structure
-from tokenly_auth.database import DatabaseManager
+from tokenly_auth.tokens.jwt import jwtHandler
+from tokenly_auth.tokens.refresh import RefreshManager
+from tokenly_auth.middleware.auth import require_auth
+from tokenly_auth.middleware.ratelimit import RateLimiter
+from tokenly_auth.validators.credentials import validate_creds_structure
 
-__version__ = "0.1.0"
-__author__ = "Tokenly-Auth Team"
+# Clean API Aliases
+Security = {
+    "hash": hash_password,
+    "verify": verifyPassword,
+    "reset": resetPassword,
+}
+
+# Standardized Naming Aliases
+TokenHandler = jwtHandler
+SessionManager = RefreshManager
+
+__version__ = "1.0.0"
+__all__ = [
+    "hash_password",
+    "verifyPassword",
+    "resetPassword",
+    "jwtHandler",
+    "RefreshManager",
+    "RateLimiter",
+    "require_auth",
+    "validate_creds_structure",
+    "Security",
+    "TokenHandler",
+    "SessionManager",
+]

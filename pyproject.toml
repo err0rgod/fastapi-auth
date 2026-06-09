@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tokenly-auth"
-version = "0.1.0"
+version = "1.0.0"
 authors = [
   { name="err0rgod", email="nirbhayerror@gmail.com" },
 ]
-description = "A professional-grade hybrid lightweight authentication and session management library."
+description = "A professional-grade, database-agnostic authentication and session management utility library."
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -16,15 +16,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Security",
-    "Framework :: Pydantic",
 ]
 dependencies = [
-    "sqlmodel>=0.0.14",
     "pyjwt>=2.8.0",
     "argon2-cffi>=23.1.0",
 ]
-
-[project.urls]
 "Homepage" = "https://github.com/err0rgod/tokenly"
 "Bug Tracker" = "https://github.com/err0rgod/tokenly/issues"
 

@@ -4,14 +4,13 @@ Integrates with jwtHandler and handleJwtBlacklist to verify access tokens.
 """
 
 from functools import wraps
-from tokenly_auth.session.jwt_handler import jwtHandler
-from tokenly_auth.session.blacklist import handleJwtBlacklist
+from tokenly_auth.tokens.jwt import jwtHandler
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def require_auth(jwt_handler: jwtHandler, blacklist_manager: handleJwtBlacklist = None):
+def require_auth(jwt_handler: jwtHandler, isBlacklisted : bool | None = False):
     """
     Decorator to enforce JWT authentication on a function.
 
@@ -52,7 +51,7 @@ def require_auth(jwt_handler: jwtHandler, blacklist_manager: handleJwtBlacklist 
             payload = jwt_handler.verifyJwt(token)
 
             # Check database for blacklisted JTI
-            if blacklist_manager and blacklist_manager.is_token_blacklisted(payload.get("jti")):
+            if isBlacklisted:
                 logger.warning("Token was revoked.")
                 raise ValueError("Token has been revoked")
 
