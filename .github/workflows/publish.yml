@@ -24,5 +24,6 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
+          rm -rf dist/ build/ *.egg-info/
           python -m build
           python -m twine upload dist/*

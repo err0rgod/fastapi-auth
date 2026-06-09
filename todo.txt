@@ -1,47 +1,18 @@
-# Tokenly-Auth Development Roadmap
-remove the dataModel 
-## Phase 0: Critical Fixes & DX Improvements (Next Session Priority)
+# Tokenly-Auth Utility Roadmap (v1.x)
 
-1. **Fix Timezone Comparison Crash (High Priority):**
-   - Standardize datetime handling for SQLite compatibility.
-   - Fix `TypeError` in `RefreshManager.validate_and_rotate` when comparing offset-aware and offset-naive datetimes.
+## Phase 1: Core Utility Enhancements
+- [ ] **Algorithm Agility:** Support alternative hashing algorithms (Bcrypt, Scrypt) alongside Argon2.
+- [ ] **JWT Flexibility:** Support Asymmetric signing (RS256, EdDSA) instead of just HMAC (HS256).
+- [ ] **Improved Rate Limiting:** Add "Sliding Window" strategy in addition to the current "Fixed Window" counter.
+- [ ] **Enhanced Validators:** Add specialized validators for Email structure and MFA (TOTP) seed generation.
 
-2. **Refactor `verifyPassword` Signature:**
-   - Rename parameters to `verifyPassword(user, plain_password)` to prevent confusion between stored hash and incoming password.
+## Phase 2: Framework Integration & DX
+- [ ] **FastAPI Dependencies:** Create pre-built FastAPI dependencies for easier token extraction.
+- [ ] **Flask/Django Wrappers:** provide lightweight adaptors for other popular WSGI/ASGI frameworks.
+- [ ] **Comprehensive Examples:** Create a `examples/` folder showing integration with Redis (Rate Limit), Postgres (Passwords), and MongoDB.
+- [ ] **Type Stubs:** Ensure 100% type hint coverage for better IDE support.
 
-3. **Decouple Logic from `userdata` Model:**
-   - Allow crypto functions (`hash_password`, `createJwt`) to accept primitive types (strings) instead of forcing the `userdata` object.
-   - Improve flexibility for developers using custom ORM models.
-
-4. **Extract Standalone Validation Utilities:**
-   - Move validation rules out of the decorator into standalone functions: `is_valid_password(pwd)` and `is_valid_username(name)`.
-
-5. **FastAPI & Modern Framework Integration:**
-   - Document or ship patterns for Dependency Injection (DI) to prevent breaking OpenAPI/Swagger schemas.
-
-6. **Enforce Secure JWT Secret Keys:**
-   - Add minimum length validation (32 bytes) for `SECRET_KEY` in `jwtHandler` to prevent insecure configurations.
-
-## Phase 1: Core Security Features
-
-1. Role-Based Access Control (RBAC):
-   - Add `role` field to `userdata`.
-   - Implement `@require_role` decorator.
-
-2. Session Management & Device Tracking:
-   - Add `user_agent` and `ip_address` to `refreshSession`.
-   - Implement "Logout from all devices" and session listing.
-
-3. Audit Logging (Security Events):
-   - Create `AuditLog` table for password changes, lockouts, etc.
-
-4. Automatic Cleanup (Housekeeping):
-   - Utility to purge expired blacklist and session entries.
-
-5. Account Status Management (Soft Delete):
-   - Add `is_active` status and update middleware checks.
-
-## Phase 2: Miscellaneous
-
-- Secure Cookie Helpers.
-- Password history tracking (N-previous passwords).
+## Phase 3: Advanced Security Patterns
+- [ ] **MFA Core:** Add utility functions for TOTP (Google Authenticator) verification.
+- [ ] **OAuth2/OIDC Helper:** Utilities for handling common OAuth2 flow artifacts (state, nonce).
+- [ ] **Token Metadata:** Add helpers to extract device/OS info from User-Agents to help users with their own session tracking.
