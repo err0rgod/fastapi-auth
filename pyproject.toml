@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tokenly-auth"
+name = "fastapi-auth"
 version = "1.0.0"
 authors = [
   { name="err0rgod", email="nirbhayerror@gmail.com" },
@@ -24,12 +24,12 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/err0rgod/tokenly"
-"Bug Tracker" = "https://github.com/err0rgod/tokenly/issues"
+"Homepage" = "https://github.com/err0rgod/fastapi-auth"
+"Bug Tracker" = "https://github.com/err0rgod/fastapi-auth/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["tokenly_auth*"]
+include = ["fastapi_auth*"]
 
 [tool.ruff]
 # Target Python version

@@ -1,5 +1,5 @@
 import pytest
-from tokenly_auth import Security
+from fastapi_auth import Security
 
 
 def test_password_hashing():

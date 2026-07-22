@@ -1,4 +1,14 @@
-# Tokenly-Auth Utility Roadmap (v1.x)
+# FastAPI-Auth Utility Roadmap (v1.x)
+JWT support
+PASETO support
+Refresh token rotation
+Role/permission management
+OAuth providers (Google, GitHub, Discord)
+Magic links
+OTP/TOTP
+Multi-tenant support
+FastAPI integration
+Good middleware/dependency injection APIs
 
 ## Phase 1: Core Utility Enhancements
 - [ ] **Algorithm Agility:** Support alternative hashing algorithms (Bcrypt, Scrypt) alongside Argon2.

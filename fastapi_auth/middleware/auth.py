@@ -5,7 +5,7 @@ Integrates with jwtHandler and handleJwtBlacklist to verify access tokens.
 
 from functools import wraps
 from typing import Optional
-from tokenly_auth.tokens.jwt import jwtHandler
+from fastapi_auth.tokens.jwt import jwtHandler
 import logging
 
 logger = logging.getLogger(__name__)

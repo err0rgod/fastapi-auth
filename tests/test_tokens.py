@@ -1,5 +1,5 @@
 import pytest
-from tokenly_auth import TokenHandler, SessionManager
+from fastapi_auth import TokenHandler, SessionManager
 
 def test_jwt_creation_and_verification():
     """Test creating and verifying a JWT."""

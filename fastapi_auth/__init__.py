@@ -1,13 +1,13 @@
-from tokenly_auth.crypto.passwords import (
+from fastapi_auth.crypto.passwords import (
     hash_password,
     verifyPassword,
     resetPassword,
 )
-from tokenly_auth.tokens.jwt import jwtHandler
-from tokenly_auth.tokens.refresh import RefreshManager
-from tokenly_auth.middleware.auth import require_auth
-from tokenly_auth.middleware.ratelimit import RateLimiter
-from tokenly_auth.validators.credentials import validate_creds_structure
+from fastapi_auth.tokens.jwt import jwtHandler
+from fastapi_auth.tokens.refresh import RefreshManager
+from fastapi_auth.middleware.auth import require_auth
+from fastapi_auth.middleware.ratelimit import RateLimiter
+from fastapi_auth.validators.credentials import validate_creds_structure
 
 # Clean API Aliases
 Security = {
