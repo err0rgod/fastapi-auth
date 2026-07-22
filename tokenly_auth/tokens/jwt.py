@@ -3,8 +3,7 @@ Module for handling JSON Web Token (JWT) generation and verification.
 Provides functionality for creating access tokens and refresh session objects.
 """
 
-from typing import Optional, Any, Dict, Tuple
-import hashlib
+from typing import Optional
 import jwt
 from datetime import datetime, timedelta, timezone
 import uuid
@@ -51,7 +50,7 @@ class jwtHandler:
             refresh_days (int, optional): Refresh token validity in days.
 
         Returns:
-            dict: Contains 'access_token' and 'refresh_token' (which is the hash) and 'refresh_day'.
+            dict: Contains 'access_token' and 'refresh_token' and 'refresh_day'.
         """
         # Using UTC for global consistency
         now = datetime.now(timezone.utc)
@@ -71,11 +70,10 @@ class jwtHandler:
 
         # Generate Refresh Token
         raw_refresh_token = secrets.token_urlsafe(64)
-        refresh_token_hash = hashlib.sha256(raw_refresh_token.encode()).hexdigest()
 
         return {
             "access_token": access_token,
-            "refresh_token": refresh_token_hash,
+            "refresh_token": raw_refresh_token,
             "refresh_days": refresh_days
         }
 

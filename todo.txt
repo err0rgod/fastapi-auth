@@ -1,28 +1,92 @@
-# Tokenly-Auth Utility Roadmap (v1.x)
-JWT support
-PASETO support
-Refresh token rotation
-Role/permission management
-OAuth providers (Google, GitHub, Discord)
-Magic links
-OTP/TOTP
-Multi-tenant support
-FastAPI integration
-Good middleware/dependency injection APIs
+1. Refresh Token Rotation Helpers
+      - Generate raw refresh token.
+      - Hash refresh token for storage.
+      - Verify submitted refresh token against stored hash.
+      - Return metadata like expires_at, jti, family_id.
+      - Keep storage decisions outside the library.
 
-## Phase 1: Core Utility Enhancements
-- [ ] **Algorithm Agility:** Support alternative hashing algorithms (Bcrypt, Scrypt) alongside Argon2.
-- [ ] **JWT Flexibility:** Support Asymmetric signing (RS256, EdDSA) instead of just HMAC (HS256).
-- [ ] **Improved Rate Limiting:** Add "Sliding Window" strategy in addition to the current "Fixed Window" counter.
-- [ ] **Enhanced Validators:** Add specialized validators for Email structure and MFA (TOTP) seed generation.
+  2. Token Revocation / Blacklist Interface
+      - Instead of isBlacklisted: bool, accept a callback:
 
-## Phase 2: Framework Integration & DX
-- [ ] **FastAPI Dependencies:** Create pre-built FastAPI dependencies for easier token extraction.
-- [ ] **Flask/Django Wrappers:** provide lightweight adaptors for other popular WSGI/ASGI frameworks.
-- [ ] **Comprehensive Examples:** Create a `examples/` folder showing integration with Redis (Rate Limit), Postgres (Passwords), and MongoDB.
-- [ ] **Type Stubs:** Ensure 100% type hint coverage for better IDE support.
+  def is_revoked(payload: dict) -> bool:
+      ...
 
-## Phase 3: Advanced Security Patterns
-- [ ] **MFA Core:** Add utility functions for TOTP (Google Authenticator) verification.
-- [ ] **OAuth2/OIDC Helper:** Utilities for handling common OAuth2 flow artifacts (state, nonce).
-- [ ] **Token Metadata:** Add helpers to extract device/OS info from User-Agents to help users with their own session tracking.
+  - Then require_auth() stays database agnostic and users can check Redis, SQL, MongoDB, etc.
+
+  3. JWT Claims Support
+     Add optional standard claims:
+      - iss issuer
+      - aud audience
+      - scope / scopes
+      - roles
+      - permissions
+      - nbf
+      - custom claims
+
+  This is very useful for real applications and still storage-free.
+
+  4. Password Policy Object
+     Instead of only a decorator, expose reusable validation:
+
+  validate_password(password, policy=PasswordPolicy(...))
+  validate_username(username, policy=UsernamePolicy(...))
+
+  Let users customize min length, required symbols, allowed username chars, etc.
+
+  5. Password Hash Upgrade Detection
+     Argon2 supports checking if a hash needs rehashing. Add:
+
+  needs_password_rehash(hash) -> bool
+  verify_and_rehash(password, hash) -> tuple[bool, str | None]
+
+  This helps apps upgrade security settings without forcing password resets.
+
+  6. Storage Protocols
+     Define lightweight protocols/interfaces for storage instead of requiring a specific DB:
+
+  class RateLimitStore(Protocol):
+      def incr(self, key: str) -> int: ...
+      def expire(self, key: str, seconds: int) -> None: ...
+
+  This makes your “database agnostic” claim stronger.
+
+  7. Framework-Neutral Bearer Token Extraction
+     Helpers like:
+
+  extract_bearer_token("Bearer abc.def.ghi")
+
+  Useful across FastAPI, Flask, Django, Starlette, Litestar, etc.
+
+  8. Security Exceptions
+     Replace generic ValueError with library exceptions:
+
+  TokenlyError
+  InvalidTokenError
+  ExpiredTokenError
+  RevokedTokenError
+  RateLimitExceeded
+  InvalidCredentialsError
+  AccountLockedError
+
+  This makes downstream apps cleaner.
+
+  9. Rate Limit Result Object
+     Instead of only returning count or raising, return:
+
+  RateLimitResult(
+      allowed=True,
+      count=3,
+      remaining=7,
+      reset_after=42,
+  )
+
+  Then users can build headers like X-RateLimit-Remaining.
+
+  10. Email / OTP Utility Layer
+     Keep it database agnostic:
+
+  - Generate numeric OTP
+  - Hash OTP
+  - Verify OTP
+  - Check expiration
+  - No email provider integration
