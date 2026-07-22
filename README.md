@@ -1,6 +1,6 @@
-# FastAPI-Auth
+# Tokenly-Auth
 
-FastAPI-Auth is a professional-grade, database-agnostic authentication and session management utility library for Python. It provides high-level security primitives without enforcing any specific database ORM or model structure, giving you total flexibility.
+Tokenly-Auth is a professional-grade, database-agnostic authentication and session management utility library for Python. It provides high-level security primitives without enforcing any specific database ORM or model structure, giving you total flexibility.
 
 ## Core Features
 
@@ -14,7 +14,7 @@ FastAPI-Auth is a professional-grade, database-agnostic authentication and sessi
 ## Installation
 
 ```bash
-pip install fastapi-auth
+pip install tokenly-auth
 ```
 
 ## Quick Start
@@ -22,7 +22,7 @@ pip install fastapi-auth
 ### 1. Password Hashing
 
 ```python
-from fastapi_auth import Security
+from tokenly_auth import Security
 
 # Hash a password
 hashed = Security["hash"]("my_secure_password")
@@ -37,7 +37,7 @@ new_hash = Security["reset"](hashed, "old_password", "new_password")
 ### 2. JWT & Tokens
 
 ```python
-from fastapi_auth import TokenHandler, SessionManager
+from tokenly_auth import TokenHandler, SessionManager
 
 handler = TokenHandler(SECRET_KEY="your_secret_key")
 
@@ -53,7 +53,7 @@ storage_hash = session_util.hash_refresh_token(tokens["refresh_token"])
 ### 3. Middleware & Protection
 
 ```python
-from fastapi_auth import require_auth, TokenHandler
+from tokenly_auth import require_auth, TokenHandler
 
 handler = TokenHandler(SECRET_KEY="your_secret_key")
 
@@ -64,11 +64,11 @@ def protected_route(payload):
 
 ## Architecture: Why "Database Agnostic"?
 
-Unlike other libraries that force you to use a specific ORM (like SQLAlchemy or SQLModel), FastAPI-Auth acts as a **security toolkit**. 
+Unlike other libraries that force you to use a specific ORM (like SQLAlchemy or SQLModel), Tokenly-Auth acts as a **security toolkit**. 
 
 - **You** control the database (PostgreSQL, MongoDB, Redis, etc.).
 - **You** control the models.
-- **FastAPI-Auth** handles the heavy lifting of hashing, signing, and security logic.
+- **Tokenly-Auth** handles the heavy lifting of hashing, signing, and security logic.
 
 ## Testing
 

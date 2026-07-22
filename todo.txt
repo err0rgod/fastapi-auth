@@ -1,4 +1,4 @@
-# FastAPI-Auth Utility Roadmap (v1.x)
+# Tokenly-Auth Utility Roadmap (v1.x)
 JWT support
 PASETO support
 Refresh token rotation

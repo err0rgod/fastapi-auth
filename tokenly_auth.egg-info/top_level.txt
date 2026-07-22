@@ -1,1 +1,1 @@
-tokenly
+tokenly_auth

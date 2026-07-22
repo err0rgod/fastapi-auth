@@ -6,7 +6,7 @@ by tracking failed attempts and locking accounts temporarily.
 
 from typing import Optional
 from argon2 import PasswordHasher
-from fastapi_auth.validators.credentials import validate_creds_structure
+from tokenly_auth.validators.credentials import validate_creds_structure
 from datetime import datetime, timedelta, timezone
 import logging
 
